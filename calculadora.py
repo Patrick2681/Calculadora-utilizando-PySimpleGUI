@@ -6,7 +6,7 @@ class Calculadora:
         layout = [
             [sg.Text(size=(20, 2), justification='right', relief=sg.RELIEF_RIDGE, background_color='#F7F3EC', text_color='#000000', key='display',border_width=10)],
             [sg.HorizontalSeparator()],
-            [sg.Button('C', size=(22, 2))],
+            [sg.Button('C', size=(16, 2)), sg.Button('Del', size=(4, 2), key='BackSpace:8')],
             [sg.Button('7', size=(4, 2)), sg.Button('8', size=(4, 2)), sg.Button('9', size=(4, 2)), sg.Button('+', size=(4, 2))],
             [sg.Button('4', size=(4, 2)), sg.Button('5', size=(4, 2)), sg.Button('6', size=(4, 2)), sg.Button('-', size=(4, 2))],
             [sg.Button('1', size=(4, 2)), sg.Button('2', size=(4, 2)), sg.Button('3', size=(4, 2)), sg.Button('*', size=(4, 2))],
