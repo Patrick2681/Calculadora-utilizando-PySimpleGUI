@@ -3,8 +3,6 @@ from PySimpleGUI import PySimpleGUI as sg
 
 class Calculadora:
     def __init__(self):
-        self.calculo = ''
-        self.numeros = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
         layout = [
             [sg.Text(size=(20, 2), justification='right', relief=sg.RELIEF_RIDGE, background_color='#F7F3EC', text_color='#000000', key='display',border_width=10)],
             [sg.HorizontalSeparator()],
@@ -13,12 +11,12 @@ class Calculadora:
             [sg.Button('4', size=(4, 2)), sg.Button('5', size=(4, 2)), sg.Button('6', size=(4, 2)), sg.Button('-', size=(4, 2))],
             [sg.Button('1', size=(4, 2)), sg.Button('2', size=(4, 2)), sg.Button('3', size=(4, 2)), sg.Button('*', size=(4, 2))],
             [sg.Button('0', size=(10, 2)), sg.Button('.', size=(4, 2)), sg.Button('/', size=(4, 2))],
-            [sg.Button('=', size=(22, 2))]
+            [sg.Button('=', size=(22, 2),bind_return_key=True)]
         ]
-        # sg.theme('LightBrown1')
         sg.theme('BlueMono')
         sg.set_options(element_padding=[4,4])
-        self.janela = sg.Window('Calculadora', layout)
+        self.janela = sg.Window('Calculadora', layout, return_keyboard_events=True)
+        self.calculo = '\n'
 
     def iniciar(self):
         while True:
@@ -28,18 +26,21 @@ class Calculadora:
                 break
 
     def ler_comandos(self, eventos):
-        if eventos in ['C', '=']:
+        if eventos in ['C', '=', '\r','BackSpace:8']:
             if eventos == "C":
-                self.calculo = ''
+                self.clean_calculo()
                 self.update_display(self.calculo)
-
             if eventos == '=':
                 resultado = self.calcular()
-                self.janela.Element('display').Update(resultado)
-                self.calculo = ''
+                self.update_display(resultado)
+                self.clean_calculo()
+            if eventos == 'BackSpace:8':
+                self.remove_calculo()
+                self.update_display(self.calculo)
         elif eventos is not None:
-            self.calculo += eventos
-            self.update_display(self.calculo)
+            if eventos in str(list(range(0,10))) or eventos in ['+','/','.','-','*']:
+                self.add_calculo(eventos)
+                self.update_display(self.calculo)
         else:
             pass
 
@@ -47,8 +48,20 @@ class Calculadora:
         try:
             resultado = eval(self.calculo)
         except:
-            return '0'
+            if self.calculo == '\n':
+                return '0'
+            return self.calculo[-2]
+
         return resultado
+
+    def add_calculo(self,item):
+        self.calculo += item
+
+    def remove_calculo(self):
+        self.calculo = self.calculo.strip(self.calculo[-1])
+
+    def clean_calculo(self):
+        self.calculo = '\n'
 
     def update_display(self, item):
         self.janela.Element('display').Update(item)
