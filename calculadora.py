@@ -39,6 +39,9 @@ class Calculadora:
                 self.update_display(self.calculo)
         elif eventos is not None:
             if eventos in str(list(range(0,10))) or eventos in ['+','/','.','-','*']:
+                if eventos == ',':
+                    print(eventos)
+                    eventos = eventos.replace(',','.')
                 self.add_calculo(eventos)
                 self.update_display(self.calculo)
         else:
