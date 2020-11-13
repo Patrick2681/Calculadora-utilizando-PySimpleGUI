@@ -61,7 +61,10 @@ class Calculadora:
         self.calculo += item
 
     def remove_calculo(self):
-        self.calculo = self.calculo.strip(self.calculo[-1])
+        try:
+            self.calculo = self.calculo.strip(self.calculo[-1])
+        except:
+            pass
 
     def clean_calculo(self):
         self.calculo = '\n'
